@@ -3,18 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.css">
     <link rel="stylesheet" href="css/style.css">
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/vendor/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="js/vendor/bootstrap.js"></script>
     <script type="text/javascript" src="js/project.js"></script>
 </head>
 <body>
-<div class="container">
-    <div class="candle">
-        <div class="candle-body">
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-sm-6 text-center">
+                <a data-toggle="modal" data-target="#fileload" class="btn btn-lg btn-primary">Данные</a>
+                <div class="btn-group btn-group-lg">
+                    <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> 1 мин <span class="fa fa-caret-down"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="#">Action</a>
+                        </li>
+                        <li>
+                            <a href="#">Action</a>
+                        </li>
+                        <li>
+                            <a href="#">Action</a>
+                        </li>
+                        <li>
+                            <a href="#">Action</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 text-center">
+                <div class="btn-group btn-group-justified btn-group-lg">
+                    <a href="#" class="btn btn-default btn-lg">Пуск</a>
+                    <a href="#" class="btn btn-default btn-lg">Пауза</a>
+                    <a href="#" class="btn btn-default btn-xs">Стоп</a>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 text-center">
+                <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group btn-group-justified">
+                        <a type="button" class="btn btn-default btn-lg">1</a>
+                        <a type="button" class="active btn btn-default btn-lg">2</a>
+                        <a type="button" class="btn btn-default btn-lg">3</a>
+                        <a type="button" class="btn btn-default btn-lg">4</a>
+                        <a type="button" class="btn btn-default btn-lg">5</a>
+                        <a type="button" class="btn btn-default btn-lg">6</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 text-center">
+                <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group btn-group-justified btn-group-lg">
+                        <a type="button" class="btn btn-default btn-lg">1</a>
+                        <a type="button" class="active btn btn-default btn-lg">2</a>
+                        <a type="button" class="btn btn-default btn-lg">3</a>
+                        <a type="button" class="btn btn-default btn-lg">4</a>
+                        <a type="button" class="btn btn-default btn-lg">5</a>
+                        <a type="button" class="btn btn-default">6</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<input type="file" id="files" name="files[]" multiple />
-<output id="list"></output>
+<div id="fileload" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Загрузка файла котировок</h4>
+            </div>
+            <div class="modal-body">
+                <input type="file" id="files" name="files[]" val="" />
+                <br>
+                <div class="progress hidden">
+                    <div class="progress-bar" role="progressbar" style="width: 60%;">0% Загружено</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="read-history-data" class="btn btn-primary disabled" >Загрузить</a>
+                <a class="btn btn-default" data-dismiss="modal">Отмена</a>
+                <a class="btn ok-btn btn-default disabled">Ок</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="chart">
+
+</div>
+
 </body>
 </html>
