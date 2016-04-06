@@ -112,6 +112,9 @@ $( document ).ready(function() {
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
     $('#fileload').on('show.bs.modal', function (e) {
+        $('.progress').addClass('hidden');
+        $('#fileload .progress-bar').css('width', '1%' );
+        $('#fileload .progress-bar').text('1% Загружено');
         $('#files').val(null);
     })
 
