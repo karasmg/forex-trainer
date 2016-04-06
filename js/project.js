@@ -3,18 +3,25 @@
  */
 
 
+
 function addCandle(time, open, close, high, low) {
+    var chart_min = 1.5;
+    var chart_max = 1.9;
+    var chart_diff = chart_max - chart_min;
+    var chart_height = 1000;
     var color='red';
     var candleHeight,bodyHeight,candleTop, bodyTop;
-    candleHeight = high-low;
-    bodyHeight = Math.abs(open-close);
-    candleTop = high;
-    bodyTop = open;
+    candleHeight = (high-low)*chart_height/chart_diff;
+    bodyHeight = (Math.abs(open-close))*chart_height/chart_diff;
+    candleTop = (high-chart_min)*chart_height/chart_diff ;
+    bodyTop = (open-chart_min)*chart_height/chart_diff;
     if(open<close){
-        bodyTop = close;
+        bodyTop = (close-chart_min)*chart_height/chart_diff;
         color = 'green';
     }
-    drawCandle (id, color, left, candleHeight, bodyHeight, candleTop, bodyTop);
+    var start = 0;
+    left = start+(time*10);
+    drawCandle ('m'+time, color, left+'px', candleHeight+'px', bodyHeight+'px', candleTop+'px', bodyTop+'px');
 }
 
 
