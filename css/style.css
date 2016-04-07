@@ -1,9 +1,10 @@
 .chart {
     height: 1000px;
     background: lightgray;
+    position: relative;
 }
 .candle {
-    position: relative;
+    position: absolute;
     top: 20px;
     left: 50px;
     width: 1px;

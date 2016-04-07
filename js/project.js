@@ -5,18 +5,18 @@
 
 
 function addCandle(time, open, close, high, low) {
-    var chart_min = 1.5;
+    var chart_min = 1.1;
     var chart_max = 1.9;
     var chart_diff = chart_max - chart_min;
-    var chart_height = 1000;
+    var chart_height = 5000;
     var color='red';
     var candleHeight,bodyHeight,candleTop, bodyTop;
     candleHeight = (high-low)*chart_height/chart_diff;
     bodyHeight = (Math.abs(open-close))*chart_height/chart_diff;
     candleTop = (high-chart_min)*chart_height/chart_diff ;
-    bodyTop = (open-chart_min)*chart_height/chart_diff;
+    bodyTop = (high-open)*chart_height/chart_diff;
     if(open<close){
-        bodyTop = (close-chart_min)*chart_height/chart_diff;
+        bodyTop = (high-close)*chart_height/chart_diff;
         color = 'green';
     }
     var start = 0;
