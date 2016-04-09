@@ -1,8 +1,17 @@
 .chart {
     height: 1000px;
-    background: lightgray;
+    background: white;
     position: relative;
+    border: 1px black solid;
 }
+
+.chart_data-box {
+    background: lightyellow;
+    height: 100%;
+    border-right: lightgray 1px solid;
+    border-top: lightgray 1px solid;
+}
+
 .candle {
     position: absolute;
     top: 20px;
@@ -11,6 +20,7 @@
     height: 100px;
     background: black;
 }
+
 .candle-body {
     position: relative;
     left: -2px;
@@ -19,8 +29,34 @@
     height: 50px;
     background: red;
 }
+
 .thumb {
     height: 75px;
     border: 1px solid #000;
     margin: 10px 5px 0 0;
+}
+
+.right-ruler {
+    height: 100%;
+    width: 45px ;
+    float: right;
+    border-left: lightgray 1px solid;
+    background: white;
+    position: relative;
+}
+
+.right-ruler ul {
+    width: 100%;
+}
+
+.top-ruler {
+    height: 30px;
+}
+
+.price-scale {
+    display: block;
+    width: 10px;
+    height: 1px;
+    background: black;
+    margin-bottom: 20px;
 }
