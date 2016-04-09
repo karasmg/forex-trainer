@@ -1,13 +1,13 @@
 .chart {
-    height: 1000px;
+    box-sizing: content-box;
     background: white;
     position: relative;
     border: 1px black solid;
 }
 
 .chart_data-box {
+    box-sizing: content-box;
     background: lightyellow;
-    height: 100%;
     border-right: lightgray 1px solid;
     border-top: lightgray 1px solid;
 }
@@ -55,8 +55,12 @@
 
 .price-scale {
     display: block;
+    font: 10px Serif;
     width: 10px;
-    height: 1px;
-    background: black;
-    margin-bottom: 20px;
+    margin-bottom: 8px;
+}
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
 }

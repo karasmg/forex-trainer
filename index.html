@@ -20,17 +20,8 @@
                 <div class="btn-group btn-group-lg">
                     <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> 1 мин <span class="fa fa-caret-down"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li>
-                            <a href="#">Action</a>
-                        </li>
-                        <li>
-                            <a href="#">Action</a>
-                        </li>
-                        <li>
-                            <a href="#">Action</a>
-                        </li>
-                        <li>
-                            <a href="#">Action</a>
+                        <li ng-repeat="item in timeFrames">
+                            <a href="#" ng-click="foo($event)">{{item.option}}<span class="hidden">{{item.id}}</span></a>
                         </li>
                     </ul>
                 </div>
@@ -92,12 +83,12 @@
     </div>
 </div>
 
-<div class="chart" ng-style="chartCSS">
+<div class="chart">
     <div class="top-ruler" ng-style="topRulerWidth"></div>
     <div class="right-ruler">
-            <div class="price-scale" ng-repeat="item in priceScale"></div>
+            <div class="price-scale" ng-repeat="item in priceScale">--{{item}}</div>
     </div>
-    <div class="chart_data-box">
+    <div class="chart_data-box"  ng-style="chartCSS">
         <h1 ng-bind="message"></h1>
         <input ng-model="message">
     </div>
