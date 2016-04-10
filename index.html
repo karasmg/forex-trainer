@@ -20,8 +20,9 @@
                 <div class="btn-group btn-group-lg">
                     <a id="timeframe_btn" class="btn btn-primary disabled dropdown-toggle" data-toggle="dropdown"> 1 мин <span class="fa fa-caret-down"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li ng-repeat="item in timeFrames">
-                            <a href="#" ng-click="foo($event)">{{item.option}}<span class="hidden">{{item.id}}</span></a>
+                        <li class="timeFrameChoice" ng-repeat="item in timeFrames">
+                            <a href="#">{{item.option}}</a>
+                            <span class="hidden">{{item.id}}</span>
                         </li>
                     </ul>
                 </div>
@@ -88,9 +89,23 @@
     <div class="right-ruler">
             <div class="price-scale" ng-repeat="item in priceScale">--{{item}}</div>
     </div>
+
+
     <div class="chart_data-box"  ng-style="chartCSS">
-        <h1 ng-bind="message"></h1>
-        <input ng-model="message">
+        <div class="candle" ng-repeat="item in timeFrameData" ng-style="item.candle">
+            <div class="candle-body" ng-style="item.body"><p class="candle-info">
+                N:{{item.num}}<br>
+                {{item.date}}<br>
+                T:{{item.time}}<br>
+                O:{{item.open}}<br>
+                C:{{item.close}}<br>
+                H:{{item.high}}<br>
+                L:{{item.low}}
+            </p>
+            </div>
+        </div>
+        <h1></h1>
+        <input ng-model="period">
     </div>
 </div>
 

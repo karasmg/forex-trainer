@@ -6,6 +6,7 @@
 }
 
 .chart_data-box {
+    position: relative;
     box-sizing: content-box;
     background: lightyellow;
     border-right: lightgray 1px solid;
@@ -30,6 +31,22 @@
     background: red;
 }
 
+.candle-info {
+    display: none;
+    text-align: right;
+    font: 12px bold black Serif;
+    position: relative;
+    top: 0px;
+    left: 15px;
+    line-height: 1;
+    background: white;
+    z-index: 2;
+}
+
+.candle-body:hover .candle-info {
+    display: inline-block;
+}
+
 .thumb {
     height: 75px;
     border: 1px solid #000;
@@ -43,6 +60,7 @@
     border-left: lightgray 1px solid;
     background: white;
     position: relative;
+    z-index: 2;
 }
 
 .right-ruler ul {

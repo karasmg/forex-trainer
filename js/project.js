@@ -2,7 +2,16 @@
  * Created by Макс on 02.04.2016.
  */
 
-
+var some = [];
+var eee = [];
+function plusMinutes (date1, min) {
+    var minutes = date1.getMinutes();
+    var year = date1.getFullYear();
+    var month = date1.getMonth();
+    var date = date1.getDate();
+    var hours = date1.getHours();
+    return new Date(year, month, date, hours, minutes+min);
+}
 var chart= {
 
     sourceData: [],
@@ -21,14 +30,17 @@ var chart= {
         {'id':'30','option':'30мин'},
         {'id':'60','option':'1час'},
         {'id':'240','option':'4часа'},
-        {'id':'3600','option':'1день'},
-        {'id':'25200','option':'1нед'},
+        {'id':'1440','option':'1день'},
+        {'id':'10080','option':'1нед'},
     ],
 
+
+
     setTimeFrame: function(period) {//5мин 10мин 15 30 60 240
-        this.timeFrameData = [];
+        period = Number(period);
+        var timeFrameData = [];
         if(period == 1) {
-            this.timeFrameData = this.sourceData;
+            timeFrameData = this.sourceData;
         }
         var startData = this.sourceData[0]["Time (UTC)"];
         var minutes = startData.getMinutes();
@@ -38,64 +50,96 @@ var chart= {
         var hours = startData.getHours();
         var firstRealMinute= Math.ceil(minutes/period)*period;
         var realStart = new Date(year, month, date, hours, firstRealMinute);
-        var realEnd = new Date(year, month, date, hours, firstRealMinute+period);
+        var realEnd = plusMinutes(realStart, period);
+        var realEnd1 = plusMinutes(realEnd, -1);
         var candleOpen = 0;
         var candleHigh = 0;
         var candleLow = Infinity;
+        var candleClose = 0;
         var candleVolume = 0;
         var trigger = 0;
+        var n=0;
         for(i=0; i<this.sourceData.length; i++){
-            if(this.sourceData[i]["Time (UTC)"]>=realStart && this.sourceData[i]["Time (UTC)"]<realEnd) {
-                //console.log(candleVolume);
-                candleVolume = Number(this.sourceData[i].Volume)+candleVolume;
-                candleOpen = Number(this.sourceData[i].Open);
-                trigger = 1;
-
-
-                if(Number(this.sourceData[i].High)>candleHigh){
-                    candleHigh = Number(this.sourceData[i].High);
-                }
-                if(Number(this.sourceData[i].Low)<candleLow){
-                    candleLow = Number(this.sourceData[i].Low);
-                }
-            } else {
-                if(candleOpen>0 && candleHigh && candleLow>0 && Number(this.sourceData[i].Close)>0) {
-                    this.timeFrameData.push({
+            if(this.sourceData[i]["Time (UTC)"]<realStart) {
+                continue;
+            }
+            if(this.sourceData[i]["Time (UTC)"]>realEnd1) {
+                if(candleOpen>0 && candleHigh && candleLow>0 && candleClose>0) {
+                    timeFrameData.push({
                         'Time (UTC)': realStart,
                         'Open': candleOpen,
-                        'Close': Number(this.sourceData[i].Close),
+                        'Close': candleClose,
                         'High': candleHigh,
                         'Low': candleLow,
                         'Volume': candleVolume
                     });
                 }
-                minutes = realStart.getMinutes();
-                year = realStart.getFullYear();
-                month = realStart.getMonth();
-                date = realStart.getDate();
-                hours = realStart.getHours();
-                realStart = realEnd;
-                realEnd = new Date(year, month, date, hours, minutes + period);
+                realStart = plusMinutes(realStart, period);
                 candleHigh = 0;
                 candleLow = Infinity;
                 candleVolume = 0;
                 candleOpen = 0;
                 trigger = 0;
             }
+            var realEnd = plusMinutes(realStart, period);
+            var realEnd1 = plusMinutes(realEnd, -1);
+            if(n<25){
+                console.log(i+':   start:'+realStart.toLocaleString()+' end:'+realEnd.toLocaleString()+' time: '+this.sourceData[i]["Time (UTC)"].toLocaleString());
+                n++;
+            }
+
+            candleVolume = Number(this.sourceData[i].Volume)+candleVolume;
+            if(trigger == 0) {
+                candleOpen = Number(this.sourceData[i].Open);
+                trigger = 1;
+            }
+            if(Number(this.sourceData[i].High)>candleHigh){
+                candleHigh = Number(this.sourceData[i].High);
+            }
+            if(Number(this.sourceData[i].Low)<candleLow){
+                candleLow = Number(this.sourceData[i].Low);
+            }
+            candleClose = Number(this.sourceData[i].Close);
         }
+      //  if(candleOpen>0 && candleHigh && candleLow>0 && candleClose>0) {
+            timeFrameData.push({
+                'Time (UTC)': realStart,
+                'Open': candleOpen,
+                'Close': candleClose,
+                'High': candleHigh,
+                'Low': candleLow,
+                'Volume': candleVolume
+            });
+       // }
+        return timeFrameData;
     },
 
     calculateRightRuler: function () {
         var scalePointHeight = 20;
         var countScalePoints = Math.floor(this.Params.height/scalePointHeight);
         var koef = (this.Params.maxPrice-this.Params.minPrice)/countScalePoints;
-        console.log(koef);
+
         for(i=0; i<countScalePoints; i++) {
-            this.priceScale[i] = (Number(this.Params.minPrice)+Number((i+1)*koef)).toFixed(4);
+            this.priceScale[i] = (Number(this.Params.maxPrice)-Number((i)*koef)).toFixed(4);
         }
     },
 
-    addCandle:  function (time, open, close, high, low) {
+    preDraw: function(timeFrameData) {
+        var result = [];
+        var countCandles =  Math.ceil((0.80*this.Params.width)/10);
+        for(i=0; i<countCandles && i<timeFrameData.length; i++){
+            var open = timeFrameData[i].Open;
+            var close = timeFrameData[i].Close;
+            var high = timeFrameData[i].High;
+            var low = timeFrameData[i].Low;
+            var time = timeFrameData[i]['Time (UTC)'];
+            result.push(this.addCandle(i, open, close, high, low, time));
+            //console.log(i+';'+open+';'+high+';'+low+';'+close);
+        }
+        return result;
+    },
+
+    addCandle:  function (num, open, close, high, low, time) {
         var chart_min = this.Params.minPrice;
         var chart_max = this.Params.maxPrice;
         var chart_diff = chart_max - chart_min;
@@ -104,22 +148,43 @@ var chart= {
         var candleHeight, bodyHeight, candleTop, bodyTop;
         candleHeight = (high - low) * chart_height / chart_diff;
         bodyHeight = (Math.abs(open - close)) * chart_height / chart_diff;
-        candleTop = (high - chart_min) * chart_height / chart_diff;
+        candleTop = (chart_max - high) * chart_height / chart_diff;
         bodyTop = (high - open) * chart_height / chart_diff;
         if (open < close) {
             bodyTop = (high - close) * chart_height / chart_diff;
             color = 'green';
         }
-        var start = 0;
-        left = start + (time * 10);
-        this.drawCandle('m' + time, color, left + 'px', candleHeight + 'px', bodyHeight + 'px', candleTop + 'px', bodyTop + 'px');
+        var start = 5;
+        var left = start + (num * 10);
+        //this.drawCandle('m' + num, color, left + 'px', candleHeight + 'px', bodyHeight + 'px', candleTop + 'px', bodyTop + 'px');
+        return {
+                'num':num,
+                'time':time.toLocaleTimeString().substring(0, time.toLocaleTimeString().length - 3),
+                'date':time.toLocaleDateString(),
+                'open':open.toFixed(4),
+                'close':close.toFixed(4),
+                'high':high.toFixed(4),
+                'low':low.toFixed(4),
+                'candle':
+                        {left:left.toFixed(4)+'px',
+                         top:candleTop.toFixed(4)+'px',
+                         height:+candleHeight.toFixed(4)+'px'},
+                'body':
+                        {background:color,
+                         top:bodyTop.toFixed(4)+'px',
+                         height:bodyHeight.toFixed(4)+'px'}
+        };
     },
 
     drawCandle: function (id, color, left, candleHeight, bodyHeight, candleTop, bodyTop) {
-        $('.chart').append('<div id="' + id + '" class="candle"></div>');
-        $('#' + id).css('top', candleTop).css('height', candleHeight).css('left', left);
+        $('.chart_data-box').append('<div id="' + id + '" class="candle"></div>');
+        $('#' + id).css('top', candleTop);
+        $('#' + id).css('height', candleHeight);
+        $('#' + id).css('left', left);
         $('#' + id).append('<div class="candle-body"></div>');
-        $('#' + id + ' ' + '.candle-body').css('top', bodyTop).css('height', bodyHeight).css('background', color);
+        $('#' + id + ' ' + '.candle-body').css('top', bodyTop);
+        $('#' + id + ' ' + '.candle-body').css('height', bodyHeight);
+        $('#' + id + ' ' + '.candle-body').css('background', color);
     },
 
 
@@ -136,9 +201,7 @@ var chart= {
         }
         this.Params.maxPrice = maxPrice;
         this.Params.minPrice = minPrice;
-        this.Params.width = function() {
-            $('.chart').width();
-        }
+        this.Params.width = $('.chart').width();
     },
 
     init: function(){
@@ -161,25 +224,49 @@ function forexTrainingCtrl ($scope) {
             $('.progress').addClass('hidden');
             $('#fileload .progress-bar').css('width', '1%');
             $('#fileload .progress-bar').text('1% Загружено');
+            $('#fileload .ok-btn').addClass('disabled');
             $('#files').val(null);
-        })
+        });
         chart.init();
+
+        $('.timeFrameChoice').click(function () {
+            var timeframe = $(this).find('span').html();
+            var timeframeText = $(this).find('a').html();
+            $('#timeframe_btn').text(timeframeText);
+            $scope.timeFrameData =  chart.preDraw(chart.setTimeFrame(timeframe));
+/*
+            for(i=0; i<$scope.timeFrameData.length; i++) {
+                console.log($scope.timeFrameData[i]);
+            }
+*/
+            $scope.$apply();
+        });
+
     });
-    $( window ).resize(function() {
+    $(window).resize(function () {
         $scope.message = $('.chart').width();
         $scope.$apply();
     });
-    $scope.chartCSS = {'height':chart.Params.height+'px'};
+
+
+    $scope.chartCSS = {'height': chart.Params.height + 'px'};
     $scope.message = $('.chart').width();
     $scope.priceScale = chart.priceScale;
     $scope.timeFrames = chart.timeFrames;
-    $scope.foo = function(ev){
-        //console.log(ev);
-        var timeFrameText = ev.currentTarget.firstChild.textContent;
-        var timeFrame = Number(ev.currentTarget.firstElementChild.innerText);
-        chart.setTimeFrame(timeFrame);
-        $('#timeframe_btn').text(timeFrameText);
-    }
+    $scope.timeFrameData = chart.timeFrameData;
+    /*
+    $scope.timeFrameData = [{
+        'body': {background: "red", top: "0px", height: "8.6114px"},
+        candle: {left: "5px", top: "781.6200px", height: "9.5532px"}
+    },
+        {
+            'body': {background: "red", top: "0px", height: "8.6114px"},
+            candle: {left: "10px", top: "783.6200px", height: "9.5532px"}
+        }
+    ];
+*/
+
+
 
 
     function loadToData(csv) {
