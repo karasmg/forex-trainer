@@ -27,7 +27,7 @@ var chart= {
 
     setTimeFrame: function(period) {//5мин 10мин 15 30 60 240
         this.timeFrameData = [];
-        if(period =1) {
+        if(period == 1) {
             this.timeFrameData = this.sourceData;
         }
         var startData = this.sourceData[0]["Time (UTC)"];
@@ -174,8 +174,11 @@ function forexTrainingCtrl ($scope) {
     $scope.priceScale = chart.priceScale;
     $scope.timeFrames = chart.timeFrames;
     $scope.foo = function(ev){
+        //console.log(ev);
+        var timeFrameText = ev.currentTarget.firstChild.textContent;
         var timeFrame = Number(ev.currentTarget.firstElementChild.innerText);
         chart.setTimeFrame(timeFrame);
+        $('#timeframe_btn').text(timeFrameText);
     }
 
 
@@ -251,7 +254,7 @@ function forexTrainingCtrl ($scope) {
                         chart.sourceData = loadToData(e.target.result);
                         chart.init();
                         $scope.$apply();
-
+                        $('#timeframe_btn').removeClass('disabled');
                     });
                 };
             })(file);
