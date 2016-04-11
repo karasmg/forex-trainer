@@ -14,9 +14,9 @@ function addCandle(time, open, close, high, low) {
     candleHeight = (high-low)*chart_height/chart_diff;
     bodyHeight = (Math.abs(open-close))*chart_height/chart_diff;
     candleTop = (high-chart_min)*chart_height/chart_diff ;
-    bodyTop = (open-chart_min)*chart_height/chart_diff;
+    bodyTop = (high-open)*chart_height/chart_diff;
     if(open<close){
-        bodyTop = (close-chart_min)*chart_height/chart_diff;
+        bodyTop = (high-close)*chart_height/chart_diff;
         color = 'green';
     }
     var start = 0;
