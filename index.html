@@ -18,10 +18,10 @@
             <div class="col-md-3 col-sm-6 text-center">
                 <a data-toggle="modal" data-target="#fileload" class="btn btn-lg btn-primary">Данные</a>
                 <div class="btn-group btn-group-lg">
-                    <a id="timeframe_btn" class="btn btn-primary disabled dropdown-toggle" data-toggle="dropdown"> 1 мин <span class="fa fa-caret-down"></span></a>
+                    <a id="timeframe_btn" class="btn btn-primary disabled dropdown-toggle" data-toggle="dropdown">{{currentTimframe}}<span class="fa fa-caret-down"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li class="timeFrameChoice" ng-repeat="item in timeFrames">
-                            <a href="#">{{item.option}}</a>
+                            <a href="#" ng-click="setTimFrame(item.id, item.option)">{{item.option}}</a>
                             <span class="hidden">{{item.id}}</span>
                         </li>
                     </ul>
