@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" ng-app="forexTraining">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -7,29 +7,22 @@
     <link rel="stylesheet" href="css/bootstrap-theme.css">
     <link rel="stylesheet" href="css/style.css">
     <script type="text/javascript" src="js/vendor/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="js/vendor/angular.min.js"></script>
     <script type="text/javascript" src="js/vendor/bootstrap.js"></script>
     <script type="text/javascript" src="js/project.js"></script>
 </head>
-<body>
+<body ng-controller="forexTrainingCtrl">
 <div class="section">
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-sm-6 text-center">
                 <a data-toggle="modal" data-target="#fileload" class="btn btn-lg btn-primary">Данные</a>
                 <div class="btn-group btn-group-lg">
-                    <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> 1 мин <span class="fa fa-caret-down"></span></a>
+                    <a id="timeframe_btn" class="btn btn-primary disabled dropdown-toggle" data-toggle="dropdown"> 1 мин <span class="fa fa-caret-down"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li>
-                            <a href="#">Action</a>
-                        </li>
-                        <li>
-                            <a href="#">Action</a>
-                        </li>
-                        <li>
-                            <a href="#">Action</a>
-                        </li>
-                        <li>
-                            <a href="#">Action</a>
+                        <li class="timeFrameChoice" ng-repeat="item in timeFrames">
+                            <a href="#">{{item.option}}</a>
+                            <span class="hidden">{{item.id}}</span>
                         </li>
                     </ul>
                 </div>
@@ -92,7 +85,28 @@
 </div>
 
 <div class="chart">
+    <div class="top-ruler" ng-style="topRulerWidth"></div>
+    <div class="right-ruler">
+            <div class="price-scale" ng-repeat="item in priceScale">--{{item}}</div>
+    </div>
 
+
+    <div class="chart_data-box"  ng-style="chartCSS">
+        <div class="candle" ng-repeat="item in timeFrameData" ng-style="item.candle">
+            <div class="candle-body" ng-style="item.body"><p class="candle-info">
+                N:{{item.num}}<br>
+                {{item.date}}<br>
+                T:{{item.time}}<br>
+                O:{{item.open}}<br>
+                C:{{item.close}}<br>
+                H:{{item.high}}<br>
+                L:{{item.low}}
+            </p>
+            </div>
+        </div>
+        <h1></h1>
+        <input ng-model="period">
+    </div>
 </div>
 
 </body>
