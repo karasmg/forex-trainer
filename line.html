@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>line</title>
+    <script type="text/javascript" src="js/vendor/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="js/vendor/raphael.js"></script>
+    <script type="text/javascript" src="js/vendor/eve.js"></script>
+    <script>
+        $( document ).ready(function() {
+            var ypoint0 = 0;
+            var xpoint0 = 0;
+            var ypoint1 = 0;
+            var xpoint1 = 0;
+
+            var paper = Raphael("holder", 640, 480);
+
+            $('.btn').click(function(){
+                $( "#holder" ).bind( "click", function( event ) {
+                    ypoint0 = ypoint1;
+                    xpoint0 = xpoint1;
+                    ypoint1 = event.pageY-$( "#holder").offset().top;
+                    xpoint1 = event.pageX-$( "#holder").offset().left;
+                    if(Math.abs(xpoint1-xpoint0)<3 && Math.abs(ypoint1-ypoint0)<3)
+                        return false;
+                    $("#holder").append('<div class="pt" style="top:' + ypoint1 + 'px; left:' + xpoint1 + 'px"></div>');
+                    $('.pt').mousedown(function(event){
+                        console.log(event.offsetX);
+                    });
+                    if(xpoint0>0 && ypoint0>0 && xpoint1>0 && ypoint1>0) {
+                        var c = paper.path("M" + xpoint0 + " " + ypoint0 + "L" + xpoint1 + " " + ypoint1);
+                        console.log(c.id);
+                        $( "#holder" ).unbind( "click" );
+                        ypoint0 = 0;
+                        xpoint0 = 0;
+                        ypoint1 = 0;
+                        xpoint1 = 0;
+                    }
+                });
+
+                paper.forEach(function(e){
+                    console.log(e.id);
+                    e.drag(function (dx, dy) {
+                        this.attr({
+                            cx: Math.min(Math.max(x + dx, 15), 85),
+                            cy: Math.min(Math.max(y + dy, 15), 85)
+                        });
+                    }, function () {
+                        x = this.attr("cx");
+                        y = this.attr("cy");
+                    });
+                });
+
+            });
+
+/*
+
+
+*/
+
+        });
+
+
+    </script>
+    <style>
+        #holder {
+            height: 480px;
+            left: 10%;
+            position: absolute;
+            top: 10%;
+            width: 640px;
+            background: lavender;
+        }
+        .pt {
+            width: 3px;
+            height: 3px;
+            border: solid 1px black;
+            margin: -2px -2px;
+            position: absolute;
+            background: white;
+            top: 0px;
+            left: 0px;
+        }
+        .btn {
+            width: 50px;
+            height: 50px;
+            background: navy;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="btn">line</div>
+<div id="holder">
+
+</div>
+</body>
+</html>

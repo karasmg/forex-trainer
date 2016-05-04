@@ -229,18 +229,6 @@ function forexTrainingCtrl ($scope) {
         });
         chart.init();
 
-        $('.timeFrameChoice').click(function () {
-            var timeframe = $(this).find('span').html();
-            var timeframeText = $(this).find('a').html();
-            $('#timeframe_btn').text(timeframeText);
-            $scope.timeFrameData =  chart.preDraw(chart.setTimeFrame(timeframe));
-/*
-            for(i=0; i<$scope.timeFrameData.length; i++) {
-                console.log($scope.timeFrameData[i]);
-            }
-*/
-            $scope.$apply();
-        });
 
     });
     $(window).resize(function () {
@@ -248,26 +236,16 @@ function forexTrainingCtrl ($scope) {
         $scope.$apply();
     });
 
-
+    $scope.currentTimframe = '1 мин';
+    $scope.setTimFrame = function (period, text ) {
+        $scope.timeFrameData =  chart.preDraw(chart.setTimeFrame(period));
+        $scope.currentTimframe = text;
+    }
     $scope.chartCSS = {'height': chart.Params.height + 'px'};
     $scope.message = $('.chart').width();
     $scope.priceScale = chart.priceScale;
     $scope.timeFrames = chart.timeFrames;
     $scope.timeFrameData = chart.timeFrameData;
-    /*
-    $scope.timeFrameData = [{
-        'body': {background: "red", top: "0px", height: "8.6114px"},
-        candle: {left: "5px", top: "781.6200px", height: "9.5532px"}
-    },
-        {
-            'body': {background: "red", top: "0px", height: "8.6114px"},
-            candle: {left: "10px", top: "783.6200px", height: "9.5532px"}
-        }
-    ];
-*/
-
-
-
 
     function loadToData(csv) {
         var lines = csv.split("\r\n");
