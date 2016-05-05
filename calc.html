@@ -44,7 +44,12 @@
         </tbody>
     </table>
 </div>
-    <div style="float: right;"><b>Общая сумма по всем разделам: {{totalSum() | currency:""}}</b></div>
+    <div style="float: right; margin-right: 10px;"><b>Общая сумма по всем разделам: {{totalSum() | currency:""}}</b></div>
+    <div style="clear: both; float: right; ">
+        <a style="margin-right: 10px;" href="" ng-click="showEmail()">Отправить расчет на email</a>
+        <input width="200" ng-if="show_email" type="email" style="margin-right: 10px; width: 300px;">
+        <input ng-if="show_email" type="submit" value="Отправить" style="margin-right: 10px;">
+    </div>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
 <script>
     function isNum(n){
@@ -86,6 +91,10 @@
         countChapter++;
         $scope.list = model;
         $scope.kurs = 25;
+        $scope.show_email = false;
+        $scope.showEmail = function() {
+            $scope.show_email = true;
+        }
 
         $scope.getTotal = function(price){
             var total = 0;
