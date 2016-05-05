@@ -27,10 +27,10 @@
         <tbody>
         <tr ng-hide="checked" ng-repeat="item in item.price">
             <td style="min-width: 50%">{{item.work}}</td>
-            <td>{{item.price}}</td>
+            <td>{{item.price*kurs | currency:""}}</td>
             <td><input type="text" ng-model="item.amount" /></td>
             <td>{{item.units}}</td>
-            <td><span class="ng-binding" style="display: inline-block; text-align: right; width: 90px;" align="right">{{getSum(item.price, item.amount) | currency:""}}</span></td>
+            <td><span class="ng-binding" style="display: inline-block; text-align: right; width: 90px;" align="right">{{getSum(item.price*kurs, item.amount) | currency:""}}</span></td>
             <td><input type="checkbox" ng-model="item.done" /></td>
         </tr>
         <tr>
@@ -85,13 +85,14 @@
         var dataName = 'items'+countChapter;
         countChapter++;
         $scope.list = model;
+        $scope.kurs = 25;
 
         $scope.getTotal = function(price){
             var total = 0;
             for(var i = 0; i < price.length; i++){
                 var item = price[i];
                 if(item.done){
-                    total += $scope.getSum(item.price, item.amount);
+                    total += $scope.getSum(item.price*$scope.kurs, item.amount);
                 }
             }
             return total;
@@ -126,31 +127,212 @@
 
 
     var model = [
-        {name: 'Электрика', price: [
-            { work: "Укладка электрического кабеля", done: true, price: 15, units: 'шт', amount:""},
-            { work: "Укладка гофры", done: true, price: 12, units: 'м', amount:""},
-            { work: "Укладка металлорукава", done: true, price: 583, units: 'м', amount:""},
-            { work: "Укладка кабель-канала", done: true, price: 55, units: 'кв. м', amount:""},
-            { work: "Монтаж электрического щита", done: true, price: 418, units: 'шт', amount:""},
-            { work: "Оборудование заземления, громоотвода", done: true, price: 156, units: 'м', amount:""},
-            { work: "Подключение к силовой электросети", done: true, price: 15, units: 'м', amount:""},
-            { work: "Набор электрощита (монтаж автоматов)", done: true, price: 563, units: 'кв. м', amount:""},
-            { work: "Монтаж распределительных коробок и подрозетников", done: true, price: 4456, units: 'шт', amount:""},
-            { work: "Монтаж розеток и выключателей", done: true, price: 78, units: 'м', amount:""},
-            { work: "Установка точечных светильников", done: true, price: 58, units: 'м', amount:""},
-            { work: "Установка светильников, бра", done: true, price: 1258, units: 'кв. м', amount:""},
-            { work: "Установка люминисцентных светильников", done: true, price: 5, units: 'шт', amount:""},
-            { work: "Установка люстры", done: true, price: 54, units: 'м', amount:""},
-            { work: "Установка и подключение входного звонка", done: true, price: 57, units: 'м', amount:""},
-            { work: "Проектирование схемы силовой электропроводки с учетом нагрузок", done: true, price: 15, units: 'кв. м', amount:""}
+        {name: "Электромонтажные работы", price: [
+
+            { work: "Укладка электрического кабеля", done: true, price: 0.4, units: "пог.м", amount:""},
+            { work: "Укладка гофры", done: true, price: 0.2, units: "пог.м", amount:""},
+            { work: "Укладка металлорукава", done: true, price: 0.24, units: "пог.м", amount:""},
+            { work: "Укладка кабель-канала", done: true, price: 0.2, units: "пог.м", amount:""},
+            { work: "Монтаж электрического щита", done: true, price: 32, units: "шт", amount:""},
+            { work: "Оборудование заземления, громоотвода", done: true, price: 23.96, units: "шт", amount:""},
+            { work: "Подключение к силовой электросети", done: true, price: 12, units: "шт", amount:""},
+            { work: "Набор электрощита (монтаж автоматов)", done: true, price: 1.4, units: "шт", amount:""},
+            { work: "Монтаж распределительных коробок и подрозетников", done: true, price: 1, units: "шт", amount:""},
+            { work: "Монтаж розеток и выключателей", done: true, price: 1.4, units: "шт", amount:""},
+            { work: "Установка точечных светильников", done: true, price: 1.4, units: "шт", amount:""},
+            { work: "Установка светильников, бра", done: true, price: 2.84, units: "шт", amount:""},
+            { work: "Установка люминисцентных светильников", done: true, price: 5.72, units: "шт", amount:""},
+            { work: "Установка люстры", done: true, price: 7.16, units: "шт", amount:""},
+            { work: "Установка и подключение входного звонка", done: true, price: 2.84, units: "шт", amount:""},
+            { work: "Проектирование схемы силовой электропроводки с учетом нагрузок", done: true, price: 19.16, units: "шт", amount:""},
         ]},
-        {name: 'Клада плитки', price: [
-            { work: "Укладка электрического кабеля", done: true, price: 15, units: 'шт', amount:""},
-            { work: "Укладка гофры", done: true, price: 12, units: 'м', amount:""},
-            { work: "Укладка металлорукава", done: true, price: 583, units: 'м', amount:""},
-            { work: "Укладка кабель-канала", done: true, price: 55, units: 'кв. м', amount:""},
-            { work: "Монтаж электрического щита", done: true, price: 418, units: 'шт', amount:""},
-            { work: "Оборудование заземления, громоотвода", done: true, price: 156, units: 'м', amount:""},
+        {name: "Cантехнические работы", price: [
+
+            { work: "Укладка канализационных труб", done: true, price: 0.8, units: "пог.м", amount:""},
+            { work: "Штробление под трубы", done: true, price: 1.8, units: "пог.м", amount:""},
+            { work: "Cпуск воды из стояков системы водоснабжения и отопления", done: true, price: 0.6, units: "шт", amount:""},
+            { work: "Устройство выводов водоснабжения и отопления", done: true, price: 6.68, units: "точка", amount:""},
+            { work: "Устройство выводов на кухне", done: true, price: 6.68, units: "комплект", amount:""},
+            { work: "Устройство выводов под стиральную и посудомоечную машину", done: true, price: 6.68, units: "комплект", amount:""},
+            { work: "Монтаж отопительного котла с подключением", done: true, price: 23.96, units: "шт", amount:""},
+            { work: "Прокладка ПВХ трубы, 50", done: true, price: 0.68, units: "пог.м", amount:""},
+            { work: "Прокладка ПВХ трубы, 100", done: true, price: 0.92, units: "пог.м", amount:""},
+            { work: "Прокладка стальной трубы", done: true, price: 0.92, units: "пог.м", amount:""},
+            { work: "Монтаж электробойлера", done: true, price: 9.56, units: "шт", amount:""},
+            { work: "Термоизоляция трубопровода", done: true, price: 0.24, units: "пог.м", amount:""},
+            { work: "Монтаж счетчиков воды с обратным клапаном", done: true, price: 8, units: "комплект", amount:""},
+            { work: "Монтаж водозапорной арматуры", done: true, price: 1.4, units: "шт", amount:""},
+            { work: "Монтаж фильтра грубой очистки", done: true, price: 1.4, units: "шт", amount:""},
+            { work: "Монтаж фильтра тонкой очистки", done: true, price: 3.32, units: "шт", amount:""},
+            { work: "Монтаж люка ревизии", done: true, price: 2.4, units: "шт", amount:""},
+            { work: "Монтаж вентиляционной решетки", done: true, price: 1.88, units: "шт", amount:""},
+            { work: "Комплектация отопительных радиаторов", done: true, price: 3.32, units: "комплект", amount:""},
+            { work: "Монтаж отопительных радиаторов", done: true, price: 11.96, units: "шт", amount:""},
+            { work: "Монтаж сантехнических аксессуаров", done: true, price: 1.4, units: "шт", amount:""},
+            { work: "Установка умывальника", done: true, price: 9.56, units: "шт", amount:""},
+            { work: "Установка смесителя", done: true, price: 2.84, units: "шт", amount:""},
+            { work: "Установка сифона", done: true, price: 1.4, units: "шт", amount:""},
+            { work: "Установка полотенцесушителя", done: true, price: 11.96, units: "шт", amount:""},
+            { work: "Установка биде, унитаза на пол", done: true, price: 9.56, units: "шт", amount:""},
+            { work: "Установка консольных биде, унитаза на раму (навесные)", done: true, price: 14.36, units: "шт", amount:""},
+            { work: "Установка ванной", done: true, price: 14.36, units: "шт", amount:""},
+            { work: "Установка гидромассажной ванной", done: true, price: 33.56, units: "шт", amount:""},
+            { work: "Установка душевой кабины", done: true, price: 19.16, units: "шт", amount:""},
+        ]},
+        {name: "Ремонт и отделка стен", price: [
+
+            { work: "Кладка кирпичных перегородок, 120 мм", done: true, price: 2.84, units: "м²", amount:""},
+            { work: "Кладка перегородок из пеноблоков", done: true, price: 2.84, units: "м²", amount:""},
+            { work: "Звукоизоляция стен минеральной ватой", done: true, price: 0.6, units: "м²", amount:""},
+            { work: "Установка полистирольных плит на стены в один слой", done: true, price: 0.92, units: "м²", amount:""},
+            { work: "Установка полистирольных плит на стены в один слой в уровень", done: true, price: 1.16, units: "м²", amount:""},
+            { work: "Монтаж штукатурной сетки", done: true, price: 0.68, units: "м²", amount:""},
+            { work: "Монтаж металического уголка", done: true, price: 0.6, units: "пог.м", amount:""},
+            { work: "Штукатурка маячная до 30 мм", done: true, price: 2.6, units: "м²", amount:""},
+            { work: "Установка перегородок из гипсокартона", done: true, price: 3.32, units: "м²", amount:""},
+            { work: "Установка фальшстен из гипсокартона", done: true, price: 2.8, units: "м²", amount:""},
+            { work: "Монтаж гипсокартонных конструкций", done: true, price: 3.8, units: "м²", amount:""},
+            { work: "Монтаж гипсокартонных конструкций (короб)", done: true, price: 2.84, units: "пог.м", amount:""},
+            { work: "Установка колон из гипсокартона", done: true, price: 4.04, units: "пог.м", amount:""},
+            { work: "Заделка швов гипсокартонных конструкций", done: true, price: 0.44, units: "пог.м", amount:""},
+            { work: "Монтаж металического уголка, металической ленты", done: true, price: 0.6, units: "пог.м", amount:""},
+            { work: "Поклейка малярной сетки на стены", done: true, price: 0.6, units: "м²", amount:""},
+            { work: "Штукатурка стен", done: true, price: 2.6, units: "м²", amount:""},
+            { work: "Грунтовка поверхности 1 слой", done: true, price: 0.2, units: "м²", amount:""},
+            { work: "Беспесчанка стен под обои или декоративную штукатурку", done: true, price: 1.64, units: "м²", amount:""},
+            { work: "Беспесчанка откосов до 300мм, под обои", done: true, price: 1.64, units: "пог.м", amount:""},
+            { work: "Беспесчанка стен под покраску", done: true, price: 2.12, units: "м²", amount:""},
+            { work: "Беспесчанка откосов до 300 мм под покраску", done: true, price: 2.12, units: "пог.м", amount:""},
+            { work: "Поклейка стекловолокна на стены", done: true, price: 1, units: "м²", amount:""},
+            { work: "Поклейка стекловолокна на откосы до 300 мм", done: true, price: 1, units: "пог.м", amount:""},
+            { work: "Поклейка обоев под покраску на стены", done: true, price: 1.4, units: "м²", amount:""},
+            { work: "Поклейка обоев под покраску на откосы до 300 мм", done: true, price: 1.4, units: "пог.м", amount:""},
+            { work: "Поклейка обоев на стены без подбора рисунка", done: true, price: 2, units: "м²", amount:""},
+            { work: "Поклейка обоев на откосы до 300 мм без подбора рисунка", done: true, price: 1.88, units: "пог.м", amount:""},
+            { work: "Поклейка обоев на стены с подбором рисунка", done: true, price: 2.12, units: "м²", amount:""},
+            { work: "Поклейка обоев на откосы до 300 мм с подбором рисунка", done: true, price: 2.12, units: "пог.м", amount:""},
+            { work: "Покраска стен краской", done: true, price: 0.92, units: "м²", amount:""},
+            { work: "Покраска многокомпонентная", done: true, price: 1.64, units: "м²", amount:""},
+            { work: "Покраска откосов до 300 мм валиком (2 раза)", done: true, price: 2.6, units: "пог.м", amount:""},
+            { work: "Нанесение декоративной штукатурки на стены", done: true, price: 2.36, units: "м²", amount:""},
+            { work: "Нанесение декоративной штукатурки на откосы до 300 мм", done: true, price: 2.36, units: "пог.м", amount:""},
+            { work: "Нанесение венецианской штукатурки (короед)", done: true, price: 4.28, units: "м²", amount:""},
+            { work: "Монтаж пластиковой вагонки на стены", done: true, price: 2.36, units: "м²", amount:""},
+            { work: "Монтаж деревянной вагонки на стены", done: true, price: 3.56, units: "м²", amount:""},
+            { work: "Монтаж вагонки МДФ на стены", done: true, price: 1.88, units: "м²", amount:""},
+            { work: "Устройство сайдинга", done: true, price: 3.32, units: "м²", amount:""},
+        ]},
+        {name: "Ремонт и отделка проемов", price: [
+
+            { work: "Монтаж арок с применением гипсокартона", done: true, price: 3.8, units: "пог.м", amount:""},
+            { work: "Монтаж откосов окон и дверей гипсокартоном", done: true, price: 3.8, units: "пог.м", amount:""},
+            { work: "Установка полистирольных плит на откосы до 300 мм", done: true, price: 0.68, units: "пог.м", amount:""},
+            { work: "Нанесение маячной штукатурки откосов до 300 мм", done: true, price: 2.12, units: "пог.м", amount:""},
+            { work: "Монтаж подоконников", done: true, price: 2.84, units: "пог.м", amount:""},
+            { work: "Монтаж обналичников и расширителей", done: true, price: 0.68, units: "пог.м", amount:""},
+            { work: "Монтаж деревянных дверных блоков до 2 м²", done: true, price: 12.8, units: "шт", amount:""},
+            { work: "Врезка замков и фурнитуры", done: true, price: 2, units: "шт", amount:""},
+            { work: "Установка окон", done: true, price: 60, units: "шт", amount:""},
+        ]},
+        {name: "Ремонт и отделка потолков", price: [
+
+            { work: "Грунтовка поверхности в 1 слой", done: true, price: 0.24, units: "м²", amount:""},
+            { work: "Штукатурка потолка", done: true, price: 3.8, units: "м²", amount:""},
+            { work: "Монтаж гипсокартонных конструкций, 1 уровень", done: true, price: 3.32, units: "м²", amount:""},
+            { work: "Монтаж прямых понижений потолков из гипсокартона", done: true, price: 3.08, units: "пог.м", amount:""},
+            { work: "Монтаж радиусных понижений потолков из гипсокартона", done: true, price: 3.8, units: "пог.м", amount:""},
+            { work: "Монтаж гипсокартонных конструкций типа короб", done: true, price: 3.08, units: "пог.м", amount:""},
+            { work: "Монтаж натяжных потолков", done: true, price: 4.28, units: "м²", amount:""},
+            { work: "Устройство потолков 'Армстронг'", done: true, price: 2.2, units: "м²", amount:""},
+            { work: "Поклейка сетки малярной на потолок", done: true, price: 0.84, units: "м²", amount:""},
+            { work: "Беспесчанка потолков под обои", done: true, price: 1.64, units: "м²", amount:""},
+            { work: "Беспесчанка потолков под покраску", done: true, price: 2.6, units: "м²", amount:""},
+            { work: "Поклейка стекловолокна на потолок", done: true, price: 1.16, units: "м²", amount:""},
+            { work: "Поклейка стекловолокна на понижение потолков", done: true, price: 1.16, units: "пог.м", amount:""},
+            { work: "Поклейка обоев на потолок без подбора рисунка под покраску", done: true, price: 1.4, units: "м²", amount:""},
+            { work: "Оклейка обоев шелк, нить, ткань", done: true, price: 2.36, units: "м²", amount:""},
+            { work: "Покраска потолка", done: true, price: 1.64, units: "м²", amount:""},
+            { work: "Поклейка багет декоративных до 50 мм", done: true, price: 0.68, units: "пог.м", amount:""},
+            { work: "Шпаклевка и покраска декоративных багет до 50 мм", done: true, price: 0.44, units: "пог.м", amount:""},
+            { work: "Багеты", done: true, price: 0.68, units: "пог.м", amount:""},
+            { work: "Обшивка потолка деревянной вагонкой", done: true, price: 3.56, units: "м²", amount:""},
+            { work: "Обшивка потолка пластиковой вагонкой", done: true, price: 2.36, units: "м²", amount:""},
+        ]},
+        {name: "Плиточные работы", price: [
+
+            { work: "Облицовка пола керамической плиткой", done: true, price: 5.6, units: "м²", amount:""},
+            { work: "Облицовка стен керамической плиткой", done: true, price: 6.2, units: "м²", amount:""},
+            { work: "Облицовка стен керамической плиткой (размер 100х100 мм)", done: true, price: 5.72, units: "м²", amount:""},
+            { work: "Установка керамического фриза до 100 мм", done: true, price: 2.16, units: "пог.м", amount:""},
+            { work: "Облицовка полов мрамором или гранитом", done: true, price: 3.32, units: "м²", amount:""},
+            { work: "Облицовка полов художественной керамической плиткой", done: true, price: 6.68, units: "м²", amount:""},
+            { work: "Облицовка стен мозаикой", done: true, price: 7.64, units: "м²", amount:""},
+            { work: "Облицовка стен декоративной плиткой под 'кирпич' или 'камень'", done: true, price: 4.28, units: "м²", amount:""},
+            { work: "Облицовка поверхности песчанником", done: true, price: 4.76, units: "м²", amount:""},
+            { work: "Монтаж керамических плинтусов", done: true, price: 1.68, units: "пог.м", amount:""},
+            { work: "Прирезка керамической плитки прямо", done: true, price: 0.68, units: "пог.м", amount:""},
+            { work: "Прирезка керамической плитки радиусом", done: true, price: 1.4, units: "пог.м", amount:""},
+            { work: "Затирка швов плитки", done: true, price: 0.4, units: "м²", amount:""},
+            { work: "Затирка швов плитки под 'кирпич' или 'камень'", done: true, price: 1.08, units: "м²", amount:""},
+            { work: "Прирезка камня", done: true, price: 1.4, units: "пог.м", amount:""},
+            { work: "Монтаж плиточного декоративного уголка", done: true, price: 1.16, units: "пог.м", amount:""},
+        ]},
+        {name: "Ремонт полов", price: [
+
+            { work: "Цементнопесчанная стяжка до 50 мм", done: true, price: 2.36, units: "м²", amount:""},
+            { work: "Цементнопесчанная стяжка до 100мм.", done: true, price: 5.6, units: "м²", amount:""},
+            { work: "Самовыравнивающая стяжка,наливной пол", done: true, price: 0.92, units: "м²", amount:""},
+            { work: "Керамзитобетонная стяжка", done: true, price: 2.84, units: "м²", amount:""},
+            { work: "Армирование стяжки", done: true, price: 1, units: "м²", amount:""},
+            { work: "Гидроизоляция", done: true, price: 0.92, units: "м²", amount:""},
+            { work: "Наливные полы", done: true, price: 4.76, units: "м²", amount:""},
+            { work: "Теплые полы", done: true, price: 2.36, units: "м²", amount:""},
+            { work: "Укладка ламината", done: true, price: 1.88, units: "м²", amount:""},
+            { work: "Настил фанеры или OSB на пол в 1 слой", done: true, price: 0.92, units: "м²", amount:""},
+            { work: "Разборка полов из линолеума или ковролина", done: true, price: 0.92, units: "м²", amount:""},
+            { work: "Укладка линолеума", done: true, price: 1.4, units: "м²", amount:""},
+            { work: "Укладка ковролина", done: true, price: 1.64, units: "м²", amount:""},
+            { work: "Укладка половой доски", done: true, price: 0.84, units: "м²", amount:""},
+            { work: "Укладка паркет-доски", done: true, price: 3.32, units: "м²", amount:""},
+            { work: "Простая укладка паркета", done: true, price: 4.28, units: "м²", amount:""},
+            { work: "Художественная укладка паркета", done: true, price: 5.48, units: "м²", amount:""},
+            { work: "Шлифовка, лакировка пола", done: true, price: 1.64, units: "м²", amount:""},
+            { work: "Установка пластиковых плинтусов", done: true, price: 0.44, units: "пог.м", amount:""},
+            { work: "Установка деревянных плинтусов", done: true, price: 1.4, units: "пог.м", amount:""},
+        ]},
+        {name: "Демонтажные работы", price: [
+
+            { work: "Демонтаж конструкций из гипсокартона", done: true, price: 1.4, units: "м²", amount:""},
+            { work: "Демонтаж бетонных перегородок", done: true, price: 9.56, units: "м²", amount:""},
+            { work: "Очистка поверхностей от старой краски", done: true, price: 0.84, units: "м²", amount:""},
+            { work: "Демонтаж вагонки", done: true, price: 0.92, units: "м²", amount:""},
+            { work: "Демонтаж цементнопесчанной стяжки до 100 мм.", done: true, price: 4.76, units: "м²", amount:""},
+            { work: "Демонтаж металлоконструкций", done: true, price: 143.96, units: "т", amount:""},
+            { work: "Выполнение дверных проёмов в кирпичной стене (1/2 кирпича)", done: true, price: 14.36, units: "шт", amount:""},
+            { work: "Выполнение дверных проёмов в бетонной стене (до 200 мм)", done: true, price: 28.76, units: "шт", amount:""},
+            { work: "Снятие старых обоев", done: true, price: 0.64, units: "м²", amount:""},
+            { work: "Сбивка старой штукатурки", done: true, price: 0.84, units: "м²", amount:""},
+            { work: "Демонтаж керамической плитки", done: true, price: 1.4, units: "м²", amount:""},
+            { work: "Разборка полов из линолеума или ковролина", done: true, price: 0.92, units: "м²", amount:""},
+            { work: "Разборка паркетного пола,пола из досок", done: true, price: 2, units: "м²", amount:""},
+            { work: "Демонтаж дверного блока", done: true, price: 3.4, units: "шт", amount:""},
+            { work: "Демонтаж оконного блока", done: true, price: 3.32, units: "м²", amount:""},
+            { work: "Демонтаж ванны", done: true, price: 5.72, units: "шт", amount:""},
+            { work: "Демонтаж труб", done: true, price: 0.4, units: "пог.м", amount:""},
+            { work: "Демонтаж умывальника", done: true, price: 1.4, units: "шт", amount:""},
+            { work: "Демонтаж унитаза", done: true, price: 4, units: "шт", amount:""},
+            { work: "Разборка потолка", done: true, price: 0.84, units: "м²", amount:""},
+            { work: "Демонтаж электропроводки", done: true, price: 0.4, units: "пог.м", amount:""},
+            { work: "Демонтаж розеток и выключателей", done: true, price: 0.8, units: "шт", amount:""},
+        ]},
+        {name: "Подсобные работы", price: [
+
+            { work: "Фасовка строительного мусора в мешки", done: true, price: 4.04, units: "м³", amount:""},
+            { work: "Спуск и загрузка строительного мусора на машину при наличии лифта", done: true, price: 18, units: "машина", amount:""},
+            { work: "Вывоз строительного мусора", done: true, price: 23.96, units: "машина", amount:""},
+            { work: "Вынос строительного мусора к мусоросборнику на улицу", done: true, price: 2.84, units: "м³", amount:""},
+            { work: "Загрузка и доставка строительных материалов", done: true, price: 7.16, units: "машина", amount:""},
+            { work: "Разгрузка и подъем строительных материалов при наличии лифта", done: true, price: 9.56, units: "машина", amount:""},
         ]},
     ];
 </script>
