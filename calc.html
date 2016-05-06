@@ -8,6 +8,7 @@
     </style>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body ng-controller="workController" style="position: relative;">
     <iframe name="frame" width=100% height=100% style="position:absolute;z-index:-1"></iframe>
@@ -45,11 +46,15 @@
     </table>
 </div>
     <div style="float: right; margin-right: 10px;"><b>Общая сумма по всем разделам: {{totalSum() | currency:""}}</b></div>
-    <div style="clear: both; float: right; ">
-        <a style="margin-right: 10px;" href="" ng-click="showEmail()">Отправить расчет на email</a>
-        <input width="200" ng-if="show_email" type="email" style="margin-right: 10px; width: 300px;">
-        <input ng-if="show_email" type="submit" value="Отправить" style="margin-right: 10px;">
-    </div>
+    <form id="send_to_email" action="calc.php" method="post" name="send_to_email" style="clear: both; float: right; margin: 10px 0;">
+        <div style="clear: both; float: right; margin: 10px;">
+            <a style="margin-right: 10px;" href="" ng-click="showEmail()">Отправить расчет на email</a>
+            <input name="email" width="200" ng-if="show_email" type="email" placeholder="Укажите Ваш email-адрес" style="width: 304px;">
+        </div>
+        <div style="clear: both; float: right; margin: 10px;" ng-show="show_email" class="g-recaptcha" data-sitekey="6LduGBITAAAAACgM52i58o9QmzHmApr0MK1c2AoZ"></div>
+        <input ng-if="show_email" type="submit" value="Отправить" style="clear: both; float: right; margin: 10px;">
+    </form>
+    <button ng-if="show_email" ng-click="sendProp()" style="clear: both; float: right; margin: 10px;">Отослать</button>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
 <script>
     function isNum(n){
@@ -69,7 +74,7 @@
         parent.postMessage(JSON.stringify(api_params), '*');
     }
 
-        setTimeout(function () { // Отработка задержки фрейма (для FF и ИЕ)
+    setTimeout(function () { // Отработка задержки фрейма (для FF и ИЕ)
             var timerResize = 'first';
             frame.onresize = function () { // frame,  - Имя фрейма (name=frame)  - cм начало Кода;
                 if (timerResize !== 'first')clearTimeout(timerResize);
@@ -86,7 +91,7 @@
 
 
 
-    workApp.controller("workController",  ['$scope', '$window', '$timeout', function($scope, $window, $timeout) {
+    workApp.controller("workController",  ['$scope', '$window', '$timeout', '$http', function($scope, $window, $timeout, $http) {
         var dataName = 'items'+countChapter;
         countChapter++;
         $scope.list = model;
@@ -130,8 +135,11 @@
             } else return "свернуть";
 
         };
-
-
+        $scope.sendProp = function() {
+            $http.post('calc.php', $scope.list).success(function (data) {
+                alert(data);
+            });
+        }
     }]);
 
 
